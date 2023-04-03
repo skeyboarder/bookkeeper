@@ -5,7 +5,7 @@ from collections import defaultdict
 from dataclasses import dataclass
 from typing import Iterator
 
-from ..repository.abstract_repository import AbstractRepository
+from bookkeeper.repository.abstract_repository import AbstractRepository
 
 
 @dataclass
@@ -20,7 +20,8 @@ class Category:
     pk: int = 0
 
     def get_parent(self,
-                   repo: AbstractRepository['Category']) -> 'Category | None':
+                   repo: AbstractRepository['Category']  # type: ignore
+                   ) -> 'Category | None':
         """
         Получить родительскую категорию в виде объекта Category
         Если метод вызван у категории верхнего уровня, возвращает None
@@ -38,7 +39,7 @@ class Category:
         return repo.get(self.parent)
 
     def get_all_parents(self,
-                        repo: AbstractRepository['Category']
+                        repo: AbstractRepository['Category']  # type: ignore
                         ) -> Iterator['Category']:
         """
         Получить все категории верхнего уровня в иерархии.
@@ -58,7 +59,7 @@ class Category:
         yield from parent.get_all_parents(repo)
 
     def get_subcategories(self,
-                          repo: AbstractRepository['Category']
+                          repo: AbstractRepository['Category']  # type: ignore
                           ) -> Iterator['Category']:
         """
         Получить все подкатегории из иерархии, т.е. непосредственные
@@ -89,7 +90,7 @@ class Category:
     def create_from_tree(
             cls,
             tree: list[tuple[str, str | None]],
-            repo: AbstractRepository['Category']) -> list['Category']:
+            repo: AbstractRepository['Category']) -> list['Category']:  # type: ignore
         """
         Создать дерево категорий из списка пар "потомок-родитель".
         Список должен быть топологически отсортирован, т.е. потомки

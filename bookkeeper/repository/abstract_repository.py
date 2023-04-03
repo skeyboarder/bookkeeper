@@ -15,7 +15,7 @@ class Model(Protocol):  # pylint: disable=too-few-public-methods
     """
     Модель должна содержать атрибут pk
     """
-    pk: int
+    pk: int | None
 
 
 T = TypeVar('T', bound=Model)
@@ -33,7 +33,7 @@ class AbstractRepository(ABC, Generic[T]):
     """
 
     @abstractmethod
-    def add(self, obj: T) -> int:
+    def add(self, obj: T) -> int | None:
         """
         Добавить объект в репозиторий, вернуть id объекта,
         также записать id в атрибут pk.
@@ -49,6 +49,15 @@ class AbstractRepository(ABC, Generic[T]):
         Получить все записи по некоторому условию
         where - условие в виде словаря {'название_поля': значение}
         если условие не задано (по умолчанию), вернуть все записи
+        """
+
+    @abstractmethod
+    def get_all_like(self, like: dict[str, str]) -> list[T]:
+        """
+        Получить все записи по некоторому условию
+        like - условие в виде словаря {'название_поля': значение},
+        где значение имеет тип строки и для выполнения условия должно
+        содержаться внутри реального значения поля
         """
 
     @abstractmethod
